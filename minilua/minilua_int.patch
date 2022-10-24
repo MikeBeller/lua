@@ -1,0 +1,31 @@
+200,201c200,201
+< #define lua_number2str(s, n) sprintf((s), "%.14g", (n))
+< #define lua_str2number(s, p) strtod((s), (p))
+---
+> #define lua_number2str(s, n) sprintf((s), "%d", (n))
+> #define lua_str2number(s, p) strtol((s), (p), 10)
+207c207,208
+< #define luai_numpow(a, b) (pow(a, b))
+---
+> // #define luai_numpow(a, b) (pow(a, b))
+> #define luai_numpow(a, b) (luaG_runerror(L, "'pow' not implemented in integer lua"), 0)
+227c228
+< typedef double lua_Number;
+---
+> typedef int lua_Number;
+4306,4308c4307,4309
+<     case OP_POW:
+<         r = luai_numpow(v1, v2);
+<         break;
+---
+>     // case OP_POW:
+>     //     r = luai_numpow(v1, v2);
+>     //     break;
+8325c8326
+<     if (fscanf(f, "%lf", &d) == 1)
+---
+>     if (fscanf(f, "%d", &d) == 1)
+8478c8479
+<                      fprintf(f, "%.14g", lua_tonumber(L, arg)) > 0;
+---
+>                      fprintf(f, "%d", lua_tonumber(L, arg)) > 0;

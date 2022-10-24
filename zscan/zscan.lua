@@ -3,7 +3,7 @@ local byte = string.byte
 local sub = string.sub
 local unpack = unpack or table.unpack
 local NUM, STR, SKIP = byte("nsx", 1, -1)
--- local inspect = require "inspect"
+local inspect = require "inspect"
 
 -- 700K lines/sec in lua 5.4
 -- 2M lines/sec in luajit
@@ -46,12 +46,21 @@ function test1()
     assert(x == "foo" and y == 18 and z == 5.0, "test1")
 end
 
-test1()
-
 function test2()
     for line in io.lines("/home/mike/tmp/2019.csv") do
         local sta, dat, typ = zscan("xnsn", line, ',')
     end
 end
 
-test2()
+function test3()
+    local r = {}
+    for line in io.lines("/home/mike/tmp/2019.csv") do
+        local typ, val = zscan("xxsn", line, ',')
+        if typ then
+            r[typ] = (r[typ] or 0) + val
+        end
+    end
+    print(inspect(r))
+end
+
+test3()
